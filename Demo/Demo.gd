@@ -11,13 +11,13 @@ func _ready():
 #		],
 #		["line1", "line2", "line3"]
 #	)
-	$SuperChart.read_data(
-		["header1", "header2"],
-		[
-			[10, 20]
-		],
-		["line1"]
-	)
+#	$SuperChart.read_data(
+#		["header1", "header2"],
+#		[
+#			[10, 20]
+#		],
+#		["line1"]
+#	)
 	$SuperChart.init_all()
 
 func _process(_delta):
