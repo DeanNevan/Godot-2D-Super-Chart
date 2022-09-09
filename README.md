@@ -1,6 +1,10 @@
 # Godot-2D-Super-Chart
 可拖拽和缩放的折线图插件
 
+目前只在win系统上测试过，后面有需求的话再加触屏支持。
+
+你也可以自己加触屏支持，只需合理调用move_pivot和change_zoom两个函数就行。
+
 ## 安装和使用
 1. 只需要把addons文件夹里的内容拷贝到你的项目
 2. 实例化SuperChart文件夹下的SuperChart.tscn场景
