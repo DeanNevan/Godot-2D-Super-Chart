@@ -55,6 +55,9 @@ export (float, 0.1, 10) var strength_zoom := 2.5
 export (float, 0.01, 100) var zoom_min := 0.1
 export (float, 0.01, 100) var zoom_max := 10
 
+export (Font) var font_view_data_title = Control.new().get_font("font")
+export (Font) var font_view_data_content = Control.new().get_font("font")
+
 var focusing_point : SuperChartDataPoint
 
 var viewing_point : SuperChartDataPoint
@@ -86,7 +89,10 @@ var pivot := Vector2()
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if _ContainerChart.get_rect().has_point(event.position):
+		print(_ContainerChart.get_global_rect())
+		print(event.position)
+		
+		if _ContainerChart.get_global_rect().has_point(event.position):
 			if event.button_index == BUTTON_LEFT:
 				dragging = event.pressed
 				if is_instance_valid(focusing_point):
@@ -99,7 +105,7 @@ func _input(event):
 		if dragging:
 			move_pivot(-strength_move * event.relative)
 			if _WindowViewData.visible:
-				_WindowViewData.rect_position = get_local_mouse_position()
+				_WindowViewData.rect_position = get_local_mouse_position() + get_global_rect().position
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -120,14 +126,16 @@ func view_point(_point : SuperChartDataPoint):
 	if viewing_point != _point:
 		viewing_point = _point
 		_WindowViewData.popup(Rect2(
-			get_local_mouse_position(),
+			get_local_mouse_position() + get_global_rect().position,
 			_WindowViewData.rect_size
 		))
 		_WindowViewData.activate(
 			line_title[_point.super_chart_data_line.line_index],
 			_point.point_modulate,
 			_point.header,
-			str(_point.value)
+			str(_point.value),
+			font_view_data_title, 
+			font_view_data_content
 		)
 	pass
 
@@ -291,7 +299,7 @@ func get_texture() -> ViewportTexture:
 	return _Viewport.get_texture()
 
 func process():
-	mouse_pos_in_chart = get_local_mouse_position() - _ContainerChart.rect_position
+	mouse_pos_in_chart = _ContainerChart.get_local_mouse_position()
 	mouse_pos_in_chart *= zoom
 	var size : Vector2 = viewport_size * zoom
 	_Viewport.size = size
